@@ -3,9 +3,11 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 import { getImagesByQuery } from './js/pixabay-api.js';
 import { createGallery } from './js/render-functions.js';
+import { showLoader } from './js/render-functions.js';
+import { hideLoader } from './js/render-functions.js';
+import { clearGallery } from './js/render-functions.js';
 
 const form = document.querySelector('.form');
-const gallery = document.querySelector('.gallery');
 const input = form.querySelector('input[name="search-text"]');
 
 form.addEventListener('submit', handleSubmit);
@@ -14,8 +16,6 @@ function handleSubmit(event) {
   event.preventDefault();
 
   const query = input.value.toLowerCase().trim();
-
-  gallery.innerHTML = '';
 
   if (!query) {
     iziToast.warning({
@@ -29,6 +29,7 @@ function handleSubmit(event) {
 }
 
 function loadImages(query) {
+  clearGallery();
   showLoader();
   getImagesByQuery(query)
     .then(data => {
@@ -53,14 +54,4 @@ function loadImages(query) {
     .finally(() => {
       hideLoader();
     });
-}
-
-const loader = document.querySelector('.loader');
-
-function showLoader() {
-  loader.classList.remove('hidden');
-}
-
-function hideLoader() {
-  loader.classList.add('hidden');
 }
